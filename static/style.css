@@ -1,0 +1,226 @@
+body, html {
+    height: 80%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    height: 80vh;
+    width: 50wh;
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chat {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.contacts_body {
+    padding: 0.75rem 0 !important;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+.msg_card_body {
+    height: calc(100vh - 140px); /* Dynamische Anpassung der Höhe basierend auf der Kartenhöhe */
+    overflow-y: auto;
+}
+
+.card-header {
+    border-radius: 0 0 0 0 !important;
+    border-bottom: 0 !important;
+}
+
+.card-footer {
+    border-radius: 0 0 0 0 !important;
+    border-top: 0 !important;
+}
+
+
+.type_msg {
+    background-color: rgb(255, 255, 255) !important;
+    border: 0 !important;
+    color: #333;
+    height: 60px !important;
+    overflow-y: auto;
+}
+
+.type_msg:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.attach_btn {
+    border-radius: 15px 0 0 15px !important;
+    background-color: rgb(255, 255, 255) !important;
+    border: 0 !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    cursor: pointer;
+}
+
+.send_btn {
+    border-radius: 0 15px 15px 0 !important;
+    background-color: rgb(255, 255, 255) !important;
+    border: 0 !important;
+    color: rgba(0,0,0, 0.3) !important;
+    cursor: pointer;
+}
+
+.upload_btn {
+    background-color: rgb(255, 255, 255) !important;
+    border-top: 0 !important; /* Schwarz mit 50% Deckkraft */
+    border-right: 2px solid rgba(0,0,0, 0.3) !important;
+    border-bottom: 0 !important;
+    border-left: 2px solid rgba(0,0,0, 0.3) !important;
+    color: rgba(0,0,0, 0.3) !important;
+    cursor: pointer;
+}
+
+.fast_btn_first {
+    height: 40px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 50px;
+    border-radius: 25px;
+    background-color: transparent;
+    border: 2px solid rgb(82, 172, 255);
+    padding: 0 20px; 
+ 
+    text-align: center; 
+    cursor: pointer;
+}
+
+.fast_btn {
+    height: 40px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 20px;
+    border-radius: 25px;
+    background-color: transparent;
+    border: 2px solid rgb(82, 172, 255);
+    padding: 0 20px; 
+    text-align: center; 
+    cursor: pointer;
+}
+.user_img {
+    height: 70px;
+    width: 70px;
+    border: 1.5px solid #f5f6fa;
+}
+
+.user_img_msg {
+    height: 40px;
+    width: 40px;
+    border: 1.5px solid #f5f6fa;
+}
+
+.img_cont {
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+
+.img_cont_msg {
+    height: 40px;
+    width: 40px;
+}
+
+.online_icon {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    bottom: 0.2em;
+    right: 0.4em;
+    border: 1.5px solid white;
+}
+
+.offline_icon {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background-color: #c23616;
+    border-radius: 50%;
+    bottom: 0.2em;
+    right: 0.4em;
+    border: 1.5px solid white;
+}
+
+.user_info {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 15px;
+}
+
+.user_info span {
+    font-size: 20px;
+    color: rgb(54, 53, 53);
+}
+
+.user_info p {
+    font-size: 10px;
+    color: rgba(54, 53, 53);
+}
+
+.msg_cotainer {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 25px;
+    background-color: rgb(82, 172, 255);
+    padding: 10px;
+    position: relative;
+}
+
+.msg_cotainer_send {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 10px;
+    border-radius: 25px;
+    background-color: #58cc71;
+    padding: 10px;
+    position: relative;
+}
+
+.msg_time {
+    position: absolute;
+    left: 0;
+    bottom: -15px;
+    color: rgba(54, 53, 53);
+    font-size: 10px;
+}
+
+.msg_time_send {
+    position: absolute;
+    right: 0;
+    bottom: -15px;
+    color: rgba(54, 53, 53);
+    font-size: 10px;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 80%; /* Nimmt fast den gesamten Bildschirm ein */
+        height: 80vh; /* Nutzt den Bildschirm maximal aus */
+        border-radius: 10px;
+    }
+}

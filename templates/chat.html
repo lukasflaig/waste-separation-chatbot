@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müll-Meister</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+    <style>
+        #file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100">
+            <div class="col-md-8 col-xl-6 chat">
+                <div class="card">
+                    <div class="card-header msg_head">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="{{ url_for('static', filename='avatar.jpg') }}" class="rounded-circle user_img">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info">
+                                <span>Müll-Meister</span>
+                                <p>Ich beantworte alle Fragen zum Thema Entsorgung in Frankfurt!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="messageFormeight" class="card-body msg_card_body"></div>
+                    <div class="card-footer">
+                        <!-- Text Chat Form -->
+                        <form id="messageArea" class="input-group">
+                            <input type="text" id="text" name="msg" placeholder="Frage mich etwas..." autocomplete="off" class="form-control type_msg" required/>
+                            <div class="input-group-append">
+                                <input type="file" id="file-input" name="image" accept="image/*" />
+                                <button type="button" id="upload-btn" class="input-group-text upload_btn"><i class="fas fa-image"></i></button>
+                                <button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- jQuery and Bootstrap scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+ 
+    <script>
+        $(document).ready(function() {
+            const date = new Date();
+            const str_time = date.getHours() + ":" + date.getMinutes();
+
+            var botWelcomeMessage = `
+                <div class="d-flex justify-content-start mb-4">
+                    <div class="img_cont_msg">
+                        <img src="{{ url_for('static', filename='avatar.jpg') }}" class="rounded-circle user_img_msg">
+                    </div>
+                    <div class="msg_cotainer">
+                        Willkommen! Ich bin der Müll-Meister. Frag mich alles über die Entsorgung in Frankfurt.
+                        <span class="msg_time">${str_time}</span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start mb-4">
+                    <button id="wertstoffhofBtn" class="fast_btn_first">Öffnungszeiten der Wertstoffhöfe</button>
+                    <button id="abfallkalenderBtn" class="fast_btn">Abfallkalender</button>
+                    <button id="second-upload-btn" class="fast_btn">Bild hochladen</button>
+                </div>`;
+            
+            $("#messageFormeight").append(botWelcomeMessage);
+
+            // schnellauswahl
+            $("#wertstoffhofBtn").on("click", function() {
+                const question = "Welche Öffnungszeiten haben die Wertstoffhöfe?";
+                const date = new Date();
+                const str_time = date.getHours() + ":" + date.getMinutes();
+
+                // Text zu chat
+                var userHtml = `
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            ${question}
+                            <span class="msg_time_send">${str_time}</span>
+                        </div>
+                        <div class="img_cont_msg">
+                            <img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg">
+                        </div>
+                    </div>`;
+                $("#messageFormeight").append(userHtml);
+
+                // Frage an den Server senden
+                $.ajax({
+                    data: { msg: question },
+                    type: "POST",
+                    url: "/get",
+                }).done(function(data) {
+                    var botHtml = `
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="{{ url_for('static', filename='avatar.jpg') }}" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                ${data.text}
+                                <span class="msg_time">${str_time}</span>
+                            </div>
+                        </div>`;
+                    $("#messageFormeight").append($.parseHTML(botHtml));
+                });
+            });
+
+            // Add event listener for the new Abfallkalender button
+            $("#abfallkalenderBtn").on("click", function() {
+                window.open("https://www.fes-frankfurt.de/services/abfallkalender", "_blank");
+            });
+
+            // Handle text message submission
+            $("#messageArea").on("submit", function(event) {
+                event.preventDefault();
+                const rawText = $("#text").val();
+                const date = new Date();
+                const str_time = date.getHours() + ":" + date.getMinutes();
+ 
+                // Text zu chat
+                var userHtml = `
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            ${rawText}
+                            <span class="msg_time_send">${str_time}</span>
+                        </div>
+                        <div class="img_cont_msg">
+                            <img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg">
+                        </div>
+                    </div>`;
+                $("#text").val("");
+                $("#messageFormeight").append(userHtml);
+
+                // Text zu server
+                $.ajax({
+                    data: { msg: rawText },
+                    type: "POST",
+                    url: "/get",
+                }).done(function(data) {
+                    
+                    var botHtml = `
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="{{ url_for('static', filename='avatar.jpg') }}" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                ${data.text}  <!-- Dies rendert die Antwort als HTML -->
+                                <span class="msg_time">${str_time}</span>
+                            </div>
+                        </div>`;
+                    // Hier sicherstellen, dass der Text als HTML geparst wird
+                    $("#messageFormeight").append($.parseHTML(botHtml));  // HTML wird jetzt richtig angezeigt
+                });
+                
+            });
+ 
+            // First image upload button
+            $("#upload-btn").on("click", function() {
+                $("#file-input").click();
+            });
+
+            // Second image upload button
+            $("#second-upload-btn").on("click", function() {
+                $("#file-input").click();
+            });
+
+            $("#file-input").on("change", function() {
+                var formData = new FormData();
+                var file = $(this).prop('files')[0];
+                formData.append('image', file);
+
+                const date = new Date();
+                const str_time = date.getHours() + ":" + date.getMinutes();
+ 
+                // image upload status in chat
+                var imageUploadHtml = `
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            Bild wird hochgeladen...
+                            <span class="msg_time_send">${str_time}</span>
+                        </div>
+                        <div class="img_cont_msg">
+                            <img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg">
+                        </div>
+                    </div>`;
+                $("#messageFormeight").append(imageUploadHtml);
+
+                // bild zu server
+                $.ajax({
+                    url: "/upload",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).done(function(response) {
+                    var recognizedLabel = response.recognized_label;
+                    var retrievedDocs = response.retrieved_docs;
+ 
+                    var uploadCompleteHtml = `
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="{{ url_for('static', filename='avatar.jpg') }}" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                <strong>Erkanntes Objekt:</strong> ${recognizedLabel}<br>
+                                <strong>Entsorgungsinformationen:</strong><br>${retrievedDocs}
+                                <span class="msg_time">${str_time}</span>
+                            </div>
+                        </div>`;
+                    $("#messageFormeight").append(uploadCompleteHtml);
+                }).fail(function() {
+                    var uploadErrorHtml = `
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="{{ url_for('static', filename='avatar.jpg') }}" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                Fehler beim Hochladen des Bildes.
+                                <span class="msg_time">${str_time}</span>
+                            </div>
+                        </div>`;
+                    $("#messageFormeight").append(uploadErrorHtml);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
